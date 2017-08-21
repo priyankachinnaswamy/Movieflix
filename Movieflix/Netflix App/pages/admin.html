@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="MovieFlix">
+
+<head>
+  <title>Add Title</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"
+    rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet" type="text/css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+  <script src="../js/app.js"></script>
+  <style>
+    body {
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body ng-controller="videosDisplayCtrl">
+  <div ng-controller="addtitleDisplayCtrl">
+    <!-- Navigation Part Start -->
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+          <a class="navbar-brand" href="#">
+        <img src="../images/logo.png" alt="logo" class="logo">
+      </a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+          <ul class="nav navbar-nav">
+            <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">Browse<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Add Videos</a></li>
+                <li><a href="#">Delete Videos</a></li>
+              </ul>
+            </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <form class="navbar-form navbar-right">
+                <div class="form-group">
+                  <input type="text" class="form-control formSearch" placeholder="Search with year,title.." ng-model="search">
+                </div>
+              </form>
+            </li>
+            <li><a href="#"><span class="glyphicon glyphicon-bell"></span></a></li>
+            <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">Priyanka<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">My Account</a></li>
+                <li><a href="#">Help Center</a></li>
+                <li><a href="../login.html">logout</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!--Add User -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <h3>Add Movie Title</h3>
+          <form name="loginform">
+            <div class="form-group">
+              <label for="taskname">Title<span class="required">*</span></label>
+              <input type="text" class="form-control" id="taskname" name="taskname" ng-model="taskname" required>
+            </div>
+            <div class="form-group">
+              <label for="genre">Genre</label>
+              <input type="text" class="form-control" id="genre" name="genre" ng-model="genre">
+            </div>
+            <div class="form-group">
+              <label for="taskyear">Year<span class="required">*</span></label>
+              <input type="text" class="form-control" id="taskyear" name="taskyear" ng-model="taskyear" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary" ng-click="addTitle(taskname,genre,taskyear)" ng-disabled="loginform.$invalid">Submit</button>
+            <button type="reset" class="btn btn-danger">Clear</button>
+          </form>
+        </div>
+        <div class="clearfix"></div>
+
+        <div class="col-md-6 col-md-offset-3" ng-show="details.length > 0">
+          <h2>Collection Of Updated Movies</h2>
+          <table class="table table-borderedj">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Year</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="detail in details">
+                <td>{{detail.title}}</td>
+                <td>{{detail.description}}</td>
+                <td>{{detail.taskyear}}</td>
+                <td><span class="glyphicon glyphicon-remove" ng-click="removeTitle($index+1)"></span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-6 col-md-offset-3">
+          <h2>Collection Of Available Movies</h2>
+          <!-- Search Title -->
+          <form>
+            <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                <input type="text" class="form-control" placeholder="Search Movie" ng-model="searchFish">
+              </div>
+            </div>
+          </form>
+          <!-- Search Title End-->
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>S.No</th>
+                <th>
+                  <a href="#" ng-click="sortType = 'title'; sortReverse = !sortReverse">
+                              Title 
+                              <span ng-show="sortType == 'title' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
+                              <span ng-show="sortType == 'title' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+                            </a>
+                </th>
+                <th>
+                  <a href="#" ng-click="sortType = 'genre'; sortReverse = !sortReverse">
+                              Genre
+                                <span ng-show="sortType == 'genre' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
+                                <span ng-show="sortType == 'genre' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+                              </a>
+                </th>
+                <th><a href="#" ng-click="sortType = 'imdbRating'; sortReverse = !sortReverse">
+                          Imdb Rating
+                            <span ng-show="sortType == 'imdbRating' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
+                            <span ng-show="sortType == 'imdbRating' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+                          </a></th>
+                <th>Edit</th>
+                <th>Remove</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="detail in movielists| orderBy:sortType:sortReverse | filter:searchFish">
+                <td>{{$index+1}}</td>
+                <td>{{detail.title}}</td>
+                <td>{{detail.genre}}</td>
+                <td>{{detail.imdbRating}}</td>
+                <td><span class="glyphicon glyphicon-pencil" ng-click="updateImdb(detail.imdbId)"></span></td>
+                <td><span class="glyphicon glyphicon-remove" ng-click="removeImdb(detail.imdbId)"></span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!--End-->
+  </div>
+  </div>
+</body>
+
+</html>

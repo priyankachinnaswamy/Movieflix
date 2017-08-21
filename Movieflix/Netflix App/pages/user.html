@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="MovieFlix">
+
+<head>
+  <title>Video Library</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"
+    rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet" type="text/css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+  <script src="../js/app.js"></script>
+</head>
+
+<body ng-controller="videosDisplayCtrl">
+  <!-- Navigation Part Start -->
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+        <a class="navbar-brand" href="#">
+        <img src="../images/logo.png" alt="logo"  class="logo">
+      </a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Browse<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Home</a></li>
+              <li><a href="#">Add Videos</a></li>
+              <li><a href="#">Delete Videos</a></li>
+            </ul>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <form class="navbar-form navbar-right">
+              <div class="form-group">
+                <input type="text" class="form-control formSearch" placeholder="Search with year,title.." ng-model="search">
+              </div>
+            </form>
+          </li>
+          <li><a href="#"><span class="glyphicon glyphicon-bell"></span></a></li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Priyanka<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">My Account</a></li>
+              <li><a href="#">Help Center</a></li>
+              <li><a href="../login.html">logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Navigation Part End -->
+  <div class="container-fluid">
+    <div id="banner">
+      <div id="movieInfo">
+        <p class="movheading ng-binding">Avengers: Age of Ultron</p>
+        <p>
+          <span class="movieyear ng-binding">2015</span>
+          <span class="movierate ng-binding">7.6</span>
+          <span class="moviesesson">1 Season</span>
+        </p>
+        <p class="movieplot ng-binding">
+          When Tony Stark and Bruce Banner try to jump-start a dormant peacekeeping program called Ultron, things go horribly wrong
+          and it's up to Earth's Mightiest Heroes to stop the villainous Ultron from enacting his terrible plans.
+        </p>
+        <p class="movieplayList">
+          <button type="button" class="btn movie-play" data-toggle="modal" data-target="#myModal">Play</button>
+          <button type="button" class="btn movieList">My List</button>
+        </p>
+        <p class="movThums">
+          <span class="glyphicon glyphicon-thumbs-up"></span>
+          <span class="glyphicon glyphicon-thumbs-down"></span>
+        </p>
+      </div>
+    </div>
+
+    <div>
+      <div id="topratesort">
+        <select ng-model="orderList" class="form-control">
+          <option value="">please Select</option>
+          <option value="imdbRating">Most Rating</option>
+          <option value="imdbVotes">Most Votes</option>
+          <option value="metaScore">Most Score</option>
+        </select>
+        <a href="" ng-click="orderByMe('metaScore')">TOP RATED MOVIES</a>
+        <a href="" ng-click="orderByMe('imdbVotes')">TOP RATED TV SERIES</a>
+      </div>
+      <div id="" class="slider">
+        <ul class="movielistsslider">
+
+          <div id="">
+            <li ng-repeat="movielist in movielists | orderBy:myOrderBy| orderBy: orderList | filter:search" class="item image-slider"
+              ng-click="moviefullDetails(movielist)">
+              <figure>
+                <img ng-src="{{movielist.poster}}" style="width:300px;height:445px;" />
+                <figcaption>
+                  <h3>{{movielist.title}}</h3>
+                  <p>
+                    <span class="movieyear">{{movielist.year}}</span>
+                    <span class="movierate">{{movielist.imdbRating}}</span>
+                    <span class="moviesesson">1 Season</span>
+                  </p>
+                  <p class="movieplot">
+                    {{movielist.plot}}
+                  </p>
+                  <p><a href="#">Read More</a></p>
+                </figcaption>
+                <figure>
+            </li>
+          </div>
+
+        </ul>
+        <a href="#" class="slider-arrow sa-left "><span class="arrowStyle">&lt;</span></a>
+        <a href="#" class="slider-arrow sa-right"><span class="arrowStyle">&gt;</span></a>
+      </div>
+      <!-- Full Details Section -->
+      <div class="row showfullDataSection" ng-show="showfulldata">
+        <div class="col-md-12" style="height:500px;">
+          <a href="" ng-click="changeView()"><span class="glyphicon glyphicon-remove glyclose"></span></a>
+          <div class="movielogo">
+
+          </div>
+          <div id="movieInfo">
+            <p class="movheading">{{movieFullData.title}}</p>
+            <p>
+              <span class="movieyear">{{movieFullData.year}}</span>
+              <span class="movierate">{{movieFullData.imdbRating}}</span>
+              <span class="moviesesson">1 Season</span>
+            </p>
+            <p class="movieplot">
+              {{movieFullData.plot}}
+            </p>
+            <div class="moviecost">
+              <p>
+                Starring: <span>{{movieFullData.actors}}</span>
+              </p>
+              <p>
+                Director: <span>{{movieFullData.director}}</span>
+              </p>
+              <p>
+                Genres: <span>{{movieFullData.genre}}</span>
+              </p>
+            </div>
+            <p class="movieplayList">
+              <button type="button" class="btn movie-play" data-toggle="modal" data-target="#myModal">Play</button>
+              <button type="button" class="btn movieList">My List</button>
+            </p>
+            <p class="movThums">
+              <span class="glyphicon glyphicon-thumbs-up"></span>
+              <span class="glyphicon glyphicon-thumbs-down"></span>
+            </p>
+            <!-- Rating-->
+            <div id="reviewStars-input">
+              <input id="star-4" type="radio" name="reviewStars" />
+              <label title="gorgeous" for="star-4"></label>
+
+              <input id="star-3" type="radio" name="reviewStars" />
+              <label title="good" for="star-3"></label>
+
+              <input id="star-2" type="radio" name="reviewStars" />
+              <label title="regular" for="star-2"></label>
+
+              <input id="star-1" type="radio" name="reviewStars" />
+              <label title="poor" for="star-1"></label>
+
+              <input id="star-0" type="radio" name="reviewStars" />
+              <label title="bad" for="star-0"></label>
+            </div>
+            <!-- Rating End-->
+          </div>
+        </div>
+        <!-- FUll Details Section End-->
+      </div>
+
+      <!-- Top Rated-->
+      <h4 class="panelHeading">Crime Movies</h4>
+      <div class="topmovieSlider">
+          <div id="" class="slider1">
+        <ul class="movielistsslider">
+
+          <li ng-repeat="movielist in movielists | orderBy:'-' " class="image-slider" ng-click="moviefullDetails(movielist)">
+            <figure>
+              <img ng-src="{{movielist.poster}}" style="width:300px;height:445px;" />
+              <figcaption>
+                <h3>{{movielist.title}}</h3>
+                <p>
+                  <span class="movieyear">{{movielist.year}}</span>
+                  <span class="movierate">{{movielist.imdbRating}}</span>
+                  <span class="moviesesson">1 Season</span>
+                </p>
+                <p class="movieplot">
+                  {{movielist.plot}}
+                </p>
+                <p><a href="#">Read More</a></p>
+              </figcaption>
+              <figure>
+          </li>
+        </ul>
+        <a href="#" class="slider1-arrow sa-left1"><span class="arrowStyle">&lt;</span></a>
+        <a href="#" class="slider1-arrow sa-right1"><span class="arrowStyle">&gt;</span></a>
+          </div>
+      </div>
+      <!-- -->
+
+      <!-- Top Rated-->
+      <h4 class="panelHeading">Romantic Movies</h4>
+      <div class="romanticSlider">
+        <div class="sliderthree">
+        <ul class="movielistsslider">
+
+          <li ng-repeat="movielist in movielists | orderBy : '-year'" class="image-slider" ng-click="moviefullDetails(movielist)">
+            <figure>
+              <img ng-src="{{movielist.poster}}" style="width:300px;height:445px;" />
+              <figcaption>
+                <h3>{{movielist.title}}</h3>
+                <p>
+                  <span class="movieyear">{{movielist.year}}</span>
+                  <span class="movierate">{{movielist.imdbRating}}</span>
+                  <span class="moviesesson">1 Season</span>
+                </p>
+                <p class="movieplot">
+                  {{movielist.plot}}
+                </p>
+                <p><a href="#">Read More</a></p>
+              </figcaption>
+              <figure>
+          </li>
+        </ul>
+        <a href="#" class="slider3-arrow sa-left3"><span class="arrowStyle">&lt;</span></a>
+        <a href="#" class="slider3-arrow sa-right3"><span class="arrowStyle">&gt;</span></a>
+        </div>
+      </div>
+      <!-- -->
+
+
+      <!-- Top Rated-->
+      <h4 class="panelHeading">Action Movies</h4>
+      <div class="actionslider">
+        <div class="sliderfour">
+        <ul class="movielistsslider">
+
+          <li ng-repeat="movielist in movielists | limitTo : 6 " class="image-slider" ng-click="moviefullDetails(movielist)">
+            <figure>
+              <img ng-src="{{movielist.poster}}" style="width:300px;height:445px;" />
+              <figcaption>
+                <h3>{{movielist.title}}</h3>
+                <p>
+                  <span class="movieyear">{{movielist.year}}</span>
+                  <span class="movierate">{{movielist.imdbRating}}</span>
+                  <span class="moviesesson">1 Season</span>
+                </p>
+                <p class="movieplot">
+                  {{movielist.plot}}
+                </p>
+                <p><a href="#">Read More</a></p>
+              </figcaption>
+              <figure>
+          </li>
+        </ul>
+        <a href="#" class="slider4-arrow sa-left4"><span class="arrowStyle">&lt;</span></a>
+        <a href="#" class="slider4-arrow sa-right4"><span class="arrowStyle">&gt;</span></a>
+        </div>
+      </div>
+      <!-- -->
+      <!-- Model -->
+      <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-body">
+              <iframe width="854" height="480" src="https://www.youtube.com/embed/upTsFoqXWhg?ecver=1" frameborder="0" allowfullscreen></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="container-fluid">
+      <div class="row footer">
+        <div class="col-md-12">
+          <ul class="social-network social-circle social list-inline">
+            <li><a href="#" class="icoRss" title="Rss"><i class="fa fa-rss"></i></a></li>
+            <li><a href="#" class="icoFacebook" title="Facebook"><i class="fa fa-facebook"></i></a></li>
+            <li><a href="#" class="icoTwitter" title="Twitter"><i class="fa fa-twitter"></i></a></li>
+            <li><a href="#" class="icoGoogle" title="Google +"><i class="fa fa-google-plus"></i></a></li>
+            <li><a href="#" class="icoLinkedin" title="Linkedin"><i class="fa fa-linkedin"></i></a></li>
+          </ul>
+        </div>
+        <div class="col-md-12">
+          <div class="col-md-4">
+
+            <ul class="foos">
+              <li><a href="">Audio Description</a></li>
+              <li><a href="">Investor Relations</a></li>
+              <li><a href="">Cookie Preferences</a></li>
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <ul class="foos">
+              <li><a href="">Help Center</a></li>
+              <li><a href="">Jobs</a></li>
+              <li><a href="">Corporate Information</a></li>
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <ul class="foos">
+              <li><a href="">Media Centre</a></li>
+              <li><a href="">Privacy</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="http://www.jqueryscript.net/demo/Simple-jQuery-Infinite-Carousel-Plugin-lbSlider/jquery.lbslider.js"></script>
+</body>
+
+</html>
